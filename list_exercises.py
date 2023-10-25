@@ -60,9 +60,18 @@ def mean_length_of_strings(string_list):
         
     return num / len(string_lengths)
 
+def count(lst, item):
+    counter = 0
+    
+    for n in lst:
+        if n == item:
+            counter += 1
+            
+    return counter
+
 def main():
     print("Hello World!")
-    test = mean_length_of_strings(["haha", "hrhrh", "hehea"])
+    test = count(["a", "b", "b", "a", "c", "b"], "b")
     print(test)
 
 if __name__ == "__main__":
