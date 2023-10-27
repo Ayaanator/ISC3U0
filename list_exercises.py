@@ -95,11 +95,11 @@ def parallel_lists(stdns, ids):
     print("ID")
     for i in range (len(stdns)):
         print("{:{width}}".format(stdns[i], width=15), end="")
-        print(ids[i])
+        print(ids[0])
 
 def main():
     students = ["Arthur M", "Dutch V", "John M", "Sadie A", "Micah B"]
-    student_ids = {"26734", "12569", "46882", "09869", "57425"}
+    student_ids = ["26734", "12569", "46882", "09869", "57425"]
 
     parallel_lists(students, student_ids)
 
