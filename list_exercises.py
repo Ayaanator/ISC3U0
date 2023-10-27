@@ -96,12 +96,29 @@ def parallel_lists(stdns, ids):
     for i in range (len(stdns)):
         print("{:{width}}".format(stdns[i], width=15), end="")
         print(ids[0])
-
+        
+def id_finder(stdns, ids):
+    quit = False
+    
+    while not quit:
+        name = input("Enter a name: ")
+        
+        if name == "quit":
+            quit = True
+            break
+        
+        for i in range(len(stdns)):
+            if stdns[i] == name:
+                print(f"{stdns[i]} student id: {ids[i]}")
+                break
+            if i == len(stdns) - 1 and stdns[i] != name:
+                print(f"{name} is not a student!")
+                
 def main():
     students = ["Arthur M", "Dutch V", "John M", "Sadie A", "Micah B"]
     student_ids = ["26734", "12569", "46882", "09869", "57425"]
 
-    parallel_lists(students, student_ids)
+    id_finder(students, student_ids)
 
 if __name__ == "__main__":
     main()
