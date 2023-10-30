@@ -119,6 +119,9 @@ def main():
     student_ids = ["26734", "12569", "46882", "09869", "57425"]
 
     id_finder(students, student_ids)
+    
+    s = "Hello!"
+    print(s[-1] + s[1:-1] + s[0])
 
 if __name__ == "__main__":
     main()
