@@ -148,7 +148,7 @@ def is_absolute(x: float, y: float):
 
     return abs(x) == abs(y)
 
-def maximum_minimum(a: float, b: float, x: float, y: float) -> float:
+def max_of_mins(a: float, b: float, x: float, y: float) -> float:
     """Determine the maximum values of the minimums between a, b, and x, y
     
     >>> maximum_minimum(1, 2, 3, 4)
@@ -159,8 +159,18 @@ def maximum_minimum(a: float, b: float, x: float, y: float) -> float:
 
     return max(min(a, b), min(x, y))
 
+def str_to_list(string: str) -> [chr]:
+    """Convert a str string into list of single characters"""
+
+    result = []
+
+    for letter in string:
+        result += letter
+    
+    return result
+
 def main():
-    print(maximum_minimum(6, 12, 9, 2))
+    print(str_to_list("Hello!"))
 
 if __name__ == "__main__":
     main()
