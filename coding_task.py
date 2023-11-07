@@ -35,7 +35,7 @@ def valid_number(s):
 
 def check_digit(s):
     """Calculate and return the check digit."""
-    total = number_sum(s)
+    w_sum = number_sum(s)
     result = (10 - w_sum % 10) % 10
 
     #Add the check digit to the end of the input
