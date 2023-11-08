@@ -160,7 +160,14 @@ def max_of_mins(a: float, b: float, x: float, y: float) -> float:
     return max(min(a, b), min(x, y))
 
 def str_to_list(string: str) -> [chr]:
-    """Convert a str string into list of single characters"""
+    """Convert a str string into list of single characters
+    
+    >>> str_to_list('Hello!')
+    ['H', 'e', 'l', 'l', 'o', '!']
+
+    >>> str_to_list("I'm Batman.")
+    ['I', "'", 'm', ' ', 'B', 'a', 't', 'm', 'a', 'n', '.']
+    """
 
     result = []
 
@@ -169,8 +176,54 @@ def str_to_list(string: str) -> [chr]:
     
     return result
 
+def factors(n: int) -> [int]:
+    """Return a list of all factors of number n
+    
+    >>> factors(5)
+    [1, 5]
+
+    >>> factors(5)
+    [1, 2, 3, 4, 6, 12]
+    """
+    result = [1]
+    for i in range(2, n + 1):
+        if n % i == 0:
+            result.append(i)
+
+    return result
+
+def is_prime(n: int) -> bool:
+    """Determine if number n is a prime number
+    
+    >>> is_prime(5)
+    True
+
+    >>> is_prime(12)
+    False
+    """
+
+    return len(factors(n)) == 2
+
+def prime_list(n: int) -> [int]:
+    """Generate list of prime numbers less than or equal to n
+    
+    >>> prime_list(10)
+    [2, 3, 5, 7]
+
+    >>> prime_list(23)
+    [2, 3, 5, 7, 11, 13, 17, 19, 23]
+    """
+
+    prime_numbers = []
+
+    for i in range(n + 1):
+        if is_prime(i):
+            prime_numbers.append(i)
+
+    return prime_numbers
+
 def main():
-    print(str_to_list("Hello!"))
+    print(prime_list(23))
 
 if __name__ == "__main__":
     main()
