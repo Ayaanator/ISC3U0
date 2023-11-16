@@ -34,7 +34,7 @@ def in_dictionary(n: str) -> bool:
     """Check and return if n is inside of dictionary WORDS.
 
     Return TRUE only if n is inside WORDS, otherwise return FALSE."""
-
+    return True
     for word in WORDS:
         if word.upper() == n:
             return True
@@ -65,15 +65,16 @@ def main():
     wins = 0
     games = 0
 
-
     # Get secret word.
     secret = get_word(WORDS).upper()
+    print(secret)
     # print(secret)
 
     while True:
+        correct_letters = []
+        
         # Beginning of loop
         while guess_counter < MAX_GUESSES and playing:
-
             # Get guess from user.
             guess = get_guess(guess_counter)
             guess_counter += 1
@@ -100,7 +101,9 @@ def main():
                     if guess[i] == secret[i]:
                         print(green(guess[i]), end="")
                     elif guess[i] in secret:
-                        print(red(guess[i]), end="")
+                        correct_letters.append(guess[i])
+                        if correct_letters.count(guess[i]) < secret.count(guess[i]):
+                            print(red(guess[i]), end="")
                     else:
                         print(guess[i], end="")
 
@@ -122,7 +125,7 @@ def main():
             # Reset variables for new game
             playing = True
             guess_counter = 0
-            guess = get_guess(guess_counter)
+            secret = get_word(WORDS).upper()
 
 if __name__ == "__main__":
     main()
