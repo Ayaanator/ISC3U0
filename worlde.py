@@ -78,8 +78,6 @@ def main():
 
     # Get secret word.
     secret = get_word(WORDS).upper()
-    secret = "CHART"
-    print(secret)
     # print(secret)
 
     while True:
