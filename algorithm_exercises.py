@@ -42,12 +42,40 @@ def find(my_list: list, searched_value) -> int:
 def print_max(my_list: list):
     """Find index of the largest value in my_list and print them."
     
-    >>> print_max()
-    """
+    >>> print_max(['dbz', 'mha', 'jjk', 'jjba', 'aot']) 
+    The value mha is at index 1
 
+    >>> print_max([5, 12, 643, 23, 4])
+    The value 643 is at index 2
+    """
+    max_index = 0
+    max_value = my_list[max_index]
     for i in range(len(my_list)):
-        if my_list[i] == searched_value:
-            print(f"The value {my_list[i]} is at index {i}")
+        if my_list[i] > max_value:
+            max_index = i
+            max_value = my_list[max_index]
+        
+    print(f"The value {max_value} is at index {max_index}")
+
+def print_min(my_list: list):
+    """Find index of the smallest value in my_list and print them."
+    
+    >>> print_min(['dbz', 'mha', 'jjk', 'jjba', 'aot'])
+    The value aot is at index 4
+
+    >>> print_min([5, 12, 643, 23, 4])
+    The value 4 is at index 4
+    """
+    min_index = 0
+    min_value = my_list[min_index]
+    for i in range(len(my_list)):
+        if my_list[i] < min_value:
+            min_index = i
+            min_value = my_list[min_index]
+        
+    print(f"The value {min_value} is at index {min_index}")
+
+def placer(my_list: list, searched_value) -> int:
 
 def main():
     print("my fellow")
