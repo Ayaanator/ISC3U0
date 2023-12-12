@@ -90,22 +90,23 @@ def placer(my_list: list, new_value) -> list:
 
     return my_list
 
-def occurences(my_list: list, searched_value) -> int:
-    """Find first occurence of searched_value in my_list. 
-    If not found, return -1
-    """
+def binary_search(my_list: list, searched_value) -> int:
+    """Find number using binary search. If not found, return -1"""
 
-    found = False
-    counter = 0
-    index = 0
-    for i in range(len(my_list)):
-        if my_list[i] == searched_value:
-            counter += 1
-            if found == False:
-                found = True
-                index = i
-
-    print(f"Index: {index}. Counter: {counter}")
+    l = 0
+    u = len(my_list) - 1
+   
+    while True:
+        index = (u+l)//2
+     
+        if not u >= l:
+            return -1
+        elif my_list[index] > searched_value:
+            u = index-1
+        elif my_list[index] < searched_value:
+            l = index + 1
+        elif my_list[index] == searched_value:
+            return index
 
 ef binary_search(my_list: list, searched_value) -> int:
     """Find number using binary search. If not found, return -1"""
@@ -113,7 +114,7 @@ ef binary_search(my_list: list, searched_value) -> int:
     l = 0
     u = len(my_list) - 1
    
-    while True:
+    while True: 
         index = ((u + l) // 2)
       
         if my_list[index] > searched_value:
