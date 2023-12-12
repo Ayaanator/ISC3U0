@@ -75,10 +75,43 @@ def print_min(my_list: list):
         
     print(f"The value {min_value} is at index {min_index}")
 
-def placer(my_list: list, searched_value) -> int:
+def placer(my_list: list, new_value) -> list:
+    """Places new_value into my_list in order."""
+
+    if new_value < my_list[0]:
+        my_list.insert(0, new_value)
+
+    if new_value > my_list[len(my_list) - 1]:
+        my_list.insert(len(my_list) - 1, new_value)
+
+    for i in range(len(my_list)):
+        if my_list[i] < new_value <= my_list[i + 1]:
+            my_list.insert(i + 1, new_value)
+
+    return my_list
+
+def occurences(my_list: list, searched_value) -> int:
+    """Find first occurence of searched_value in my_list. 
+    If not found, return -1
+    """
+
+    found = False
+    counter = 0
+    index = 0
+    for i in range(len(my_list)):
+        if my_list[i] == searched_value:
+            counter += 1
+            if found == False:
+                found = True
+                index = i
+
+    print(f"Index: {index}. Counter: {counter}")
 
 def main():
     print("my fellow")
+    a = [1, 2, 3, 3, 4, 5]
+    placer(a, 4)
+    print(a)
 
 if __name__ == "__main__":
     main()
