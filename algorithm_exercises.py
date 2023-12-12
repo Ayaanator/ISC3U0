@@ -107,14 +107,23 @@ def occurences(my_list: list, searched_value) -> int:
 
     print(f"Index: {index}. Counter: {counter}")
 
-def binary_search(my_list: list, searched_value) -> int:
+ef binary_search(my_list: list, searched_value) -> int:
     """Find number using binary search. If not found, return -1"""
 
-    index = len(my_list) // 2
-    
-    if my_list[index] < searched_value:
-
-    else:
+    l = 0
+    u = len(my_list) - 1
+   
+    while True:
+        index = ((u + l) // 2)
+      
+        if my_list[index] > searched_value:
+            u = index-1
+        elif my_list[index] < searched_value:
+            l = index + 1
+        elif my_list[index] == searched_value:
+            return index
+        else:
+            return -1
 
 
 def main():
