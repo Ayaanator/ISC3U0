@@ -108,7 +108,7 @@ def binary_search(my_list: list, searched_value) -> int:
         elif my_list[index] == searched_value:
             return index
 
-ef binary_search(my_list: list, searched_value) -> int:
+def binary_search(my_list: list, searched_value) -> int:
     """Find number using binary search. If not found, return -1"""
 
     l = 0
@@ -118,7 +118,7 @@ ef binary_search(my_list: list, searched_value) -> int:
         index = ((u + l) // 2)
       
         if my_list[index] > searched_value:
-            u = index-1
+            u = index - 1
         elif my_list[index] < searched_value:
             l = index + 1
         elif my_list[index] == searched_value:
