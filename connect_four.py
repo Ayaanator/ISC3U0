@@ -10,10 +10,11 @@ PLAYER_TWO = "🔴"
 BLANK = "⚪"
 
 game_over = False
-board = []
 
 def change_board(rows: int, columns: int):
     """Change the board's dimensions to rows x columns."""
+
+    result = []
 
     for i in range(rows):
         row = []
@@ -21,7 +22,9 @@ def change_board(rows: int, columns: int):
         for j in range(columns):
             row.append(BLANK)
         
-        board.append(row)
+        result.append(row)
+
+    return result
 
 def print_menu():
     """Print the game menu."""
@@ -46,7 +49,7 @@ def validate_input(min: int, max: int, msg: str) -> int:
         except:
             print("Invalid input. You must enter an integer.")
 
-def print_board():
+def print_board(board: list):
     """Print board in a formatted manner."""
 
     first_row = True
@@ -77,34 +80,33 @@ def print_rules():
     print("If the board is full and there are not four coins stacked, it is a tie.")
     input("> ")
 
-def is_full() -> bool:
-    """Returns whether if the board is full"""
+def is_full(board: list) -> bool:
+    """Returns whether if board is full"""
 
     for row in board:
         for column in row:
-            if column != BLANK:
+            if column == BLANK:
                 return False
 
     return True
 
-def player_turn(player: str, current_columns: int):
-    """Do the player's turn."""
+def player_turn(player: str, current_columns: int, board: list):
+    """Do the player's turn on board."""
 
     print(f"Player {player}, select a column (1 - {current_columns})")
-    p1_choice = validate_input(1, current_columns, "> ")
-    if place_coin(p1_choice, player) == False:
-        print(f"\nColumn {p1_choice} is full. Select another column.")
+    choice = validate_input(1, current_columns, "> ")
+    if place_coin(choice, player, board) == False:
+        print(f"\nColumn {choice} is full. Select another column.")
 
-    print_board()
+    print_board(board)
+    print()
 
-    if is_full():
-        sentinel = True
-
-def place_coin(column: int, player: str):
-    """Place coin in desired column. If column is full, return False."""
+def place_coin(column: int, player: str, board: list):
+    """Place coin in desired column of board. If column is full, return False."""
     column -= 1
 
-    for i in range(len(board) - 1, -1, -1):
+    length = len(board)
+    for i in range(length - 1, -1, -1):
         if board[i][column] == BLANK:
             board[i][column] = player
             return True
@@ -118,14 +120,14 @@ def main():
     print("CONNECT FOUR")
     print("="*12)
 
-    change_board(6, 7)
+    board = change_board(6, 7)
 
     current_rows = 6
     current_columns = 7
 
     running = True
 
-    for i in range(len(board) - 1, 0, -1):
+    for i in range(len(board) - 1, -1, -1):
         print(i)
 
     while running == True:
@@ -135,14 +137,18 @@ def main():
         # Game loop
         if num == 1:
             game_over = False
+            winner = "⚪"
 
             while game_over == False:
-                
                 # Player one turn
-                player_turn(PLAYER_ONE, current_columns);
+                player_turn(PLAYER_ONE, current_columns, board)
+                game_over = is_full(board)
 
-                # Player two turn
-                player_turn(PLAYER_TWO, current_columns);
+                if is_full(board) == False:
+                    # Player two turn
+                    player_turn(PLAYER_TWO, current_columns, board)
+        
+                game_over = is_full(board)
         
         # Change board dimensions
         elif num == 2:
@@ -152,7 +158,7 @@ def main():
             print(f"Please enter the desired columns (less than {MAX_COLUMNS + 1}): ")
             columns = validate_input(1, MAX_COLUMNS, "> ")
 
-            change_board(rows, columns)
+            board = change_board(rows, columns)
             current_rows = rows
             current_columns = columns
         # Print the rules
