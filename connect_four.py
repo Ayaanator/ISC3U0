@@ -93,13 +93,17 @@ def is_full(board: list) -> bool:
 def player_turn(player: str, current_columns: int, board: list):
     """Do the player's turn on board."""
 
-    print(f"Player {player}, select a column (1 - {current_columns})")
-    choice = validate_input(1, current_columns, "> ")
-    if place_coin(choice, player, board) == False:
-        print(f"\nColumn {choice} is full. Select another column.")
-
-    print_board(board)
-    print()
+    while  True:
+        print(f"Player {player}, select a column (1 - {current_columns})")
+        choice = validate_input(1, current_columns, "> ")
+        if place_coin(choice, player, board) == False:
+            print(f"\nColumn {choice} is full. Select another column.")
+            print_board(board)
+            print()
+        else:
+            print_board(board)
+            print()
+            break
 
 def place_coin(column: int, player: str, board: list):
     """Place coin in desired column of board. If column is full, return False."""
@@ -112,6 +116,17 @@ def place_coin(column: int, player: str, board: list):
             return True
         
     return False
+
+def find_winner(board: list, player: str) -> str:
+    """Determine if player has won in board. If not, return ⚪"""
+    
+    # Search horizontally
+
+    # Search vertically
+
+    # Search diagonally
+
+    return "🟡"
 
 
 def main():
@@ -136,19 +151,29 @@ def main():
 
         # Game loop
         if num == 1:
+            print_board(board)
+            print("\n")
+
             game_over = False
             winner = "⚪"
-
+            
             while game_over == False:
                 # Player one turn
                 player_turn(PLAYER_ONE, current_columns, board)
+                winner = find_winner(board, PLAYER_ONE)
                 game_over = is_full(board)
 
+                # Check if board is full before letting player 🔴 go
                 if is_full(board) == False:
                     # Player two turn
                     player_turn(PLAYER_TWO, current_columns, board)
-        
-                game_over = is_full(board)
+                    winner = find_winner(board, PLAYER_TWO)
+                    game_over = is_full(board)
+
+            if winner == "⚪":
+                print("\nGame over! It's a tie!")
+            else:
+                print(f"\nGame over! Player {winner}  won!")
         
         # Change board dimensions
         elif num == 2:

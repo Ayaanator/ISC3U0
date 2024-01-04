@@ -17,7 +17,7 @@ def rolling_game():
     
     tries = 0
     input("Roll your first number: ")
-    first_num = roll();
+    first_num = roll()
     
     while True:
         input("Roll another number: ")
