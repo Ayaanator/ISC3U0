@@ -119,10 +119,9 @@ def place_coin(column: int, player: str, board: list):
 
 def find_winner(board: list, player: str) -> str:
     """Determine if player has won in board. If not, return ⚪"""
-    
-    counter = 0
 
     # Search horizontally
+    counter = 0
     for row in board:
         for item in row:
             if item == player:
@@ -130,7 +129,18 @@ def find_winner(board: list, player: str) -> str:
                 if counter == 4:
                     return player
 
+            else:
+                counter = 0
     # Search vertically
+    counter = 0
+    for i in range(len(board[0])):
+        for j in range(len(board)):
+            if board[j][i] == player:
+                counter += 1
+                if counter == 4:
+                    return player
+            else:
+                counter = 0
 
     # Search diagonally
 
@@ -143,10 +153,10 @@ def main():
     print("CONNECT FOUR")
     print("="*12)
 
-    board = change_board(6, 7)
-
     current_rows = 6
     current_columns = 7
+
+    board = change_board(current_rows, current_columns)
 
     running = True
 
@@ -182,6 +192,8 @@ def main():
                 print("\nGame over! It's a tie!")
             else:
                 print(f"\nGame over! Player {winner}  won!")
+
+            board = change_board(current_columns, current_columns)
         
         # Change board dimensions
         elif num == 2:
