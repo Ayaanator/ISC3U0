@@ -120,13 +120,21 @@ def place_coin(column: int, player: str, board: list):
 def find_winner(board: list, player: str) -> str:
     """Determine if player has won in board. If not, return ⚪"""
     
+    counter = 0
+
     # Search horizontally
+    for row in board:
+        for item in row:
+            if item == player:
+                counter += 1
+                if counter == 4:
+                    return player
 
     # Search vertically
 
     # Search diagonally
 
-    return "🟡"
+    return "⚪"
 
 
 def main():
@@ -161,14 +169,14 @@ def main():
                 # Player one turn
                 player_turn(PLAYER_ONE, current_columns, board)
                 winner = find_winner(board, PLAYER_ONE)
-                game_over = is_full(board)
+                game_over = True if winner != "⚪" else is_full(board)
 
-                # Check if board is full before letting player 🔴 go
-                if is_full(board) == False:
+                # Check if game is over before letting player 🔴 go
+                if game_over == False:
                     # Player two turn
                     player_turn(PLAYER_TWO, current_columns, board)
                     winner = find_winner(board, PLAYER_TWO)
-                    game_over = is_full(board)
+                    game_over = True if winner != "⚪" else is_full(board)
 
             if winner == "⚪":
                 print("\nGame over! It's a tie!")
