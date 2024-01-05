@@ -7,7 +7,14 @@ MAX_ROWS = 30
 
 PLAYER_ONE = "🟡"
 PLAYER_TWO = "🔴"
-BLANK = "⚪"
+BLANK = "🔘"
+
+# Other blank emojis if display isn't compatible with other systems
+# ◯
+# ⚪
+# 〄
+# ⭕
+# 🔘
 
 game_over = False
 
