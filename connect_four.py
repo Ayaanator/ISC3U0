@@ -149,7 +149,9 @@ def find_winner(board: list, player: str) -> str:
             else:
                 counter = 0
 
-    # Search diagonally
+    # Search diagonally left-right
+    x_counter = 0
+    y_counter = 0
 
     return "⚪"
 
