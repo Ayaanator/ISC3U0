@@ -154,7 +154,7 @@ def find_winner(board: list, player: str) -> str:
             else:
                 counter = 0
 
-    # Search diagonally left-right
+    # Search diagonally left to right
     counter = 0
     main_counter = 0
 
@@ -173,6 +173,28 @@ def find_winner(board: list, player: str) -> str:
             
             y_counter -= 1
             x_counter += 1
+
+        main_counter += 1
+
+    # Search diagonally right to left
+    counter = 0
+    main_counter = 0
+
+    while main_counter < len(board):
+        y_counter = main_counter
+        x_counter = len(board) - 1
+
+        for i in range(main_counter + 1):
+            test = board[y_counter][x_counter]
+            if test == player:
+                counter += 1
+                if counter == 4:
+                    return player
+            else:
+                counter = 0
+            
+            y_counter -= 1
+            x_counter -= 1
 
         main_counter += 1
 
