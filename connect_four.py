@@ -174,7 +174,6 @@ def find_winner(board: list, player: str) -> str:
             y_counter -= 1
             x_counter += 1
 
-            
         main_counter += 1
 
     return "⚪"
