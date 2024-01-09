@@ -1,4 +1,10 @@
-"""This program plays connect four on the terminal."""
+"""This program plays connect four on the terminal.
+The goal of the game is to connect four of the same coins in a row.
+This can be done vertically, horizontally, and diagonally.
+Coins are placed on top of previously placed coins.
+If a column is full, you cannot place a coin there.
+If all columns are full and there isn't four in a row, it is a tie.
+"""
 
 __author__ = "Ayaan Adrito"
 
@@ -135,7 +141,6 @@ def find_winner(board: list, player: str) -> str:
                 counter += 1
                 if counter == 4:
                     return player
-
             else:
                 counter = 0
     # Search vertically
@@ -151,18 +156,20 @@ def find_winner(board: list, player: str) -> str:
 
     # Search diagonally left-right
     counter = 0
-    
     main_counter = 0
 
     while main_counter < len(board):
         y_counter = main_counter
         x_counter = 0
 
-        for i in range(main_counter):
-            if board[y_counter][x_counter] == player:
+        for i in range(main_counter + 1):
+            test = board[y_counter][x_counter]
+            if test == player:
                 counter += 1
-            if counter == 4:
-                return player
+                if counter == 4:
+                    return player
+            else:
+                counter = 0
             
             y_counter -= 1
             x_counter += 1
@@ -218,6 +225,10 @@ def main():
                 print("\nGame over! It's a tie!")
             else:
                 print(f"\nGame over! Player {winner}  won!")
+                if winner == "🟡":
+                     winner = find_winner(board, "🟡")
+                elif winner == "🔴":
+                    winner = find_winner(board, "🔴")
 
             board = change_board(current_columns, current_columns)
         
