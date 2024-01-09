@@ -72,7 +72,6 @@ def print_board(board: list):
             print()
             pass
 
-        # print(len(board[i])*"-"*2)
         first_column = True
 
         for j in range(len(board[i])):
@@ -81,6 +80,10 @@ def print_board(board: list):
                 print("|", end="")
 
             print(f"{board[i][j]}|", end="")
+        
+    print()
+    for k in range(len(board) + 1):
+        print(f"{k + 1}  ", end="")
 
 def print_rules():
     """Print the rules of connect four."""
@@ -199,6 +202,10 @@ def find_winner(board: list, player: str) -> str:
         main_counter += 1
 
     return "⚪"
+
+def split_board(board: list, left: bool) -> list:
+    result = [[]]
+
 
 
 def main():
