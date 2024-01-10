@@ -212,7 +212,7 @@ def split_board(board: list, left: bool) -> list:
         for row in board:
             new_row = []
 
-            for i in range(0, len(board[0]) - 1, 1):
+            for i in range(1, len(board[0]), 1):
                 new_row += [row[i]]
 
             result += [new_row]
@@ -220,7 +220,7 @@ def split_board(board: list, left: bool) -> list:
         for row in board:
             new_row = []
 
-            for i in range(len(board[0]) - 1, 0, -1):
+            for i in range(0, len(board[0]) - 1, 1):
                 new_row += [row[i]]
 
             result += [new_row]
@@ -238,8 +238,6 @@ def main():
     current_columns = 7
 
     board = change_board(current_rows, current_columns)
-    print_board(board)
-    board = split_board(board, False)
     print_board(board)
 
     running = True
