@@ -82,7 +82,7 @@ def print_board(board: list):
             print(f"{board[i][j]}|", end="")
         
     print()
-    for k in range(len(board) + 1):
+    for k in range(len(board[0])):
         print(f"{k + 1}  ", end="")
 
 def print_rules():
@@ -204,8 +204,28 @@ def find_winner(board: list, player: str) -> str:
     return "⚪"
 
 def split_board(board: list, left: bool) -> list:
-    result = [[]]
+    """Split one column from the left or right side of board and return it."""
+    
+    result = []
+    
+    if left == True:
+        for row in board:
+            new_row = []
 
+            for i in range(0, len(board[0]) - 1, 1):
+                new_row += [row[i]]
+
+            result += [new_row]
+    else:
+        for row in board:
+            new_row = []
+
+            for i in range(len(board[0]) - 1, 0, -1):
+                new_row += [row[i]]
+
+            result += [new_row]
+
+    return result
 
 
 def main():
@@ -218,11 +238,11 @@ def main():
     current_columns = 7
 
     board = change_board(current_rows, current_columns)
+    print_board(board)
+    board = split_board(board, False)
+    print_board(board)
 
     running = True
-
-    for i in range(len(board) - 1, -1, -1):
-        print(i)
 
     while running == True:
         print_menu()
