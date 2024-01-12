@@ -97,7 +97,7 @@ def print_rules():
     input("> ")
 
 def is_full(board: list) -> bool:
-    """Returns whether if board is full"""
+    """Returns whether if board is full."""
 
     for row in board:
         for column in row:
@@ -134,7 +134,7 @@ def place_coin(column: int, player: str, board: list):
     return False
 
 def find_winner(board: list, player: str) -> str:
-    """Determine if player has won in board. If not, return ⚪"""
+    """Determine if player has won in board. If not, return ⚪."""
 
     # Search horizontally
     counter = 0
@@ -157,49 +157,57 @@ def find_winner(board: list, player: str) -> str:
             else:
                 counter = 0
 
+    orig_board = board
+
     # Search diagonally left to right
-    counter = 0
-    main_counter = 0
+    while len(board[0]) > 4:
+        counter = 0
+        main_counter = 0
 
-    while main_counter < len(board):
-        y_counter = main_counter
-        x_counter = 0
+        while main_counter < len(board) and main_counter < 5:
+            y_counter = main_counter
+            x_counter = 0
 
-        for i in range(main_counter + 1):
-            test = board[y_counter][x_counter]
-            if test == player:
-                counter += 1
-                if counter == 4:
-                    return player
-            else:
-                counter = 0
-            
-            y_counter -= 1
-            x_counter += 1
+            for i in range(main_counter + 1):
+                test = board[y_counter][x_counter]
+                if test == player:
+                    counter += 1
+                    if counter == 4:
+                        return player
+                else:
+                    counter = 0
+                
+                y_counter -= 1
+                x_counter += 1
 
-        main_counter += 1
+            main_counter += 1
+
+        board = split_board(board, True)
 
     # Search diagonally right to left
-    counter = 0
-    main_counter = 0
+    while len(board[0]) > 4:
+        counter = 0
+        main_counter = 0
 
-    while main_counter < len(board):
-        y_counter = main_counter
-        x_counter = len(board) - 1
+        while main_counter < len(board) and main_counter < 5:
+            y_counter = main_counter
+            x_counter = len(board) - 1
 
-        for i in range(main_counter + 1):
-            test = board[y_counter][x_counter]
-            if test == player:
-                counter += 1
-                if counter == 4:
-                    return player
-            else:
-                counter = 0
+            for i in range(main_counter + 1):
+                test = board[y_counter][x_counter]
+                if test == player:
+                    counter += 1
+                    if counter == 4:
+                        return player
+                else:
+                    counter = 0
+                
+                y_counter -= 1
+                x_counter -= 1
+
+            main_counter += 1
             
-            y_counter -= 1
-            x_counter -= 1
-
-        main_counter += 1
+        board = split_board(board, True)
 
     return "⚪"
 
