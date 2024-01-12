@@ -160,11 +160,11 @@ def find_winner(board: list, player: str) -> str:
     orig_board = board
 
     # Search diagonally left to right
-    while len(board[0]) > 4:
+    while len(board[0]) > 5:
         counter = 0
         main_counter = 0
 
-        while main_counter < len(board) and main_counter < 5:
+        while main_counter < len(board):
             y_counter = main_counter
             x_counter = 0
 
@@ -184,12 +184,15 @@ def find_winner(board: list, player: str) -> str:
 
         board = split_board(board, True)
 
+    # Reset board after splitting to setup right-left diagonal search
+    board = orig_board
+
     # Search diagonally right to left
-    while len(board[0]) > 4:
+    while len(board[0]) > 5:
         counter = 0
         main_counter = 0
 
-        while main_counter < len(board) and main_counter < 5:
+        while main_counter < len(board):
             y_counter = main_counter
             x_counter = len(board) - 1
 
@@ -256,6 +259,7 @@ def main():
 
         # Game loop
         if num == 1:
+            board = change_board(current_rows, current_columns)
             print_board(board)
             print("\n")
 
