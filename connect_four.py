@@ -106,6 +106,8 @@ def is_full(board: list) -> bool:
 
     return True
 
+    # return not BLANK in board 
+
 def player_turn(player: str, current_columns: int, board: list):
     """Do the player's turn on board."""
 
@@ -160,15 +162,14 @@ def find_winner(board: list, player: str) -> str:
     orig_board = board
 
     # Search diagonally left to right
-    while len(board[0]) > 5:
+    while len(board[0]) > 4:
         counter = 0
         main_counter = 0
 
         while main_counter < len(board):
             y_counter = main_counter
             x_counter = 0
-
-            for i in range(main_counter + 1):
+            while x_counter < main_counter + 1 and y_counter < len(board[0]):
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
@@ -188,7 +189,7 @@ def find_winner(board: list, player: str) -> str:
     board = orig_board
 
     # Search diagonally right to left
-    while len(board[0]) > 5:
+    while len(board[0]) > 4:
         counter = 0
         main_counter = 0
 
@@ -196,7 +197,7 @@ def find_winner(board: list, player: str) -> str:
             y_counter = main_counter
             x_counter = len(board) - 1
 
-            for i in range(main_counter + 1):
+            while x_counter < main_counter + 1 and y_counter < 5:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
@@ -247,7 +248,7 @@ def main():
 
     current_rows = 6
     current_columns = 7
-
+    
     board = change_board(current_rows, current_columns)
     print_board(board)
 
