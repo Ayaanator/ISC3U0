@@ -200,7 +200,7 @@ def find_winner(board: list, player: str) -> str:
             y_counter = main_counter
             x_counter = len(board[0]) - 1
 
-            while x_counter > 0 and y_counter < len(board[0]) + 2:
+            while x_counter > -1 and y_counter < len(board[0]) + 2:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
