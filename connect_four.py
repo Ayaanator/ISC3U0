@@ -141,6 +141,7 @@ def find_winner(board: list, player: str) -> str:
     # Search horizontally
     counter = 0
     for row in board:
+        counter = 0
         for item in row:
             if item == player:
                 counter += 1
@@ -151,6 +152,7 @@ def find_winner(board: list, player: str) -> str:
     # Search vertically
     counter = 0
     for i in range(len(board[0])):
+        counter = 0
         for j in range(len(board)):
             if board[j][i] == player:
                 counter += 1
@@ -162,14 +164,14 @@ def find_winner(board: list, player: str) -> str:
     orig_board = board
 
     # Search diagonally left to right
-    while len(board[0]) > 4:
+    while len(board[0]) > 3:
         counter = 0
         main_counter = 0
 
         while main_counter < len(board):
             y_counter = main_counter
             x_counter = 0
-            while x_counter < main_counter + 1 and y_counter < len(board[0]):
+            while x_counter < main_counter + 1 and y_counter < len(board[0]) + 2 and x_counter < len(board[0]):
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
@@ -184,20 +186,21 @@ def find_winner(board: list, player: str) -> str:
             main_counter += 1
 
         board = split_board(board, True)
+        counter = 0
 
     # Reset board after splitting to setup right-left diagonal search
     board = orig_board
 
     # Search diagonally right to left
-    while len(board[0]) > 4:
+    while len(board[0]) > 3:
         counter = 0
         main_counter = 0
 
         while main_counter < len(board):
             y_counter = main_counter
-            x_counter = len(board) - 1
+            x_counter = len(board[0]) - 1
 
-            while x_counter < main_counter + 1 and y_counter < 5:
+            while x_counter > 0 and y_counter < len(board[0]) + 2:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
@@ -211,7 +214,8 @@ def find_winner(board: list, player: str) -> str:
 
             main_counter += 1
             
-        board = split_board(board, True)
+        board = split_board(board, False)
+        counter = 0
 
     return "⚪"
 
