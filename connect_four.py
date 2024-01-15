@@ -8,8 +8,8 @@ If all columns are full and there isn't four in a row, it is a tie.
 
 __author__ = "Ayaan Adrito"
 
-MAX_COLUMNS = 35
-MAX_ROWS = 30
+MAX_COLUMNS = 10
+MAX_ROWS = 10
 MIN_ROWS = 6
 MIN_COLUMNS = 7
 
@@ -41,6 +41,7 @@ def change_board(rows: int, columns: int):
 
     return result
 
+
 def print_menu():
     """Print the game menu."""
 
@@ -50,8 +51,20 @@ def print_menu():
     print("3. How to play & Rules")
     print("4. Exit")
 
+
 def validate_input(min: int, max: int, msg: str) -> int:
-    """Return a valid integer between min and max."""
+    """Return a valid integer between min and max.
+    
+    >>> validate_input(1, 10, '> ')
+    > 352325
+    Number 352325 is out of range. Input must be between 1 and 10
+    > -234
+    Number -234 is out of range. Input must be between 1 and 10
+    > 0
+    Number 0 is out of range. Input must be between 1 and 10
+    > 3
+    3
+    """
 
     while True:
         try:
@@ -63,6 +76,7 @@ def validate_input(min: int, max: int, msg: str) -> int:
                 print(f"Number {number} is out of range. Input must be between {min} and {max}")
         except:
             print("Invalid input. You must enter an integer.")
+
 
 def print_board(board: list):
     """Print board in a formatted manner."""
@@ -81,11 +95,14 @@ def print_board(board: list):
                 first_column = False
                 print("|", end="")
 
-            print(f"{board[i][j]}|", end="")
-        
+            print(f"{board[i][j]} |", end="")
+    
+    # Print the column numbers under the board
     print()
+    print("  ", end ="")
     for k in range(len(board[0])):
-        print(f"{k + 1}  ", end="")
+        print(f"{k + 1}   ", end="")
+
 
 def print_rules():
     """Print the rules of connect four."""
@@ -96,7 +113,8 @@ def print_rules():
     print("The first player to stack four coins wins.")
     print("The four coins may be stacked horizontaly, vertically, or diagonally.")
     print("If the board is full and there are not four coins stacked, it is a tie.")
-    input("> ")
+    input("Press enter to continue >>> ")
+
 
 def is_full(board: list) -> bool:
     """Returns whether if board is full."""
@@ -108,7 +126,7 @@ def is_full(board: list) -> bool:
 
     return True
 
-    # return not BLANK in board 
+    # return not BLANK in board
 
 def player_turn(player: str, current_columns: int, board: list):
     """Do the player's turn on board."""
@@ -125,6 +143,7 @@ def player_turn(player: str, current_columns: int, board: list):
             print()
             break
 
+
 def place_coin(column: int, player: str, board: list):
     """Place coin in desired column of board. If column is full, return False."""
     column -= 1
@@ -136,6 +155,7 @@ def place_coin(column: int, player: str, board: list):
             return True
         
     return False
+
 
 def check_horizontal(board: list, player: str) -> str:
     """Check for four in a row horizontally."""
@@ -153,6 +173,7 @@ def check_horizontal(board: list, player: str) -> str:
 
     return "⚪"
 
+
 def check_vertical(board: list, player: str) -> str:
     """Check for four in a row vertically"""
 
@@ -168,6 +189,7 @@ def check_vertical(board: list, player: str) -> str:
                 counter = 0
 
     return "⚪"
+
 
 def check_left_diagonal(board: list, player: str) -> str:
     """Check for four in a row diagonally left to right"""
@@ -199,6 +221,7 @@ def check_left_diagonal(board: list, player: str) -> str:
         counter = 0
 
     return "⚪"
+
 
 def check_right_diagonal(board: list, player: str) -> str:
     """Check for four in a row diagonally right to left"""
@@ -232,6 +255,7 @@ def check_right_diagonal(board: list, player: str) -> str:
 
     return "⚪" 
 
+
 def find_winner(board: list, player: str) -> str:
     """Determine if player has won in board. If not, return ⚪."""
 
@@ -239,6 +263,7 @@ def find_winner(board: list, player: str) -> str:
         return player
     
     return "⚪"
+
 
 def split_board(board: list, left: bool) -> list:
     """Split one column from the left or right side of board and return it."""
@@ -266,11 +291,20 @@ def split_board(board: list, left: bool) -> list:
 
     return result
 
+
 def main():
-    # SHOULD WE HAVE TWO SPACES BETWEEN EVERY FUNCTION?!
-    print("="*12)
-    print("CONNECT FOUR")
-    print("="*12)
+    print("="*150)
+    print("""
+  /$$$$$$   /$$$$$$  /$$   /$$ /$$   /$$ /$$$$$$$$  /$$$$$$  /$$$$$$$$       /$$$$$$$$ /$$$$$$  /$$   /$$ /$$$$$$$ 
+ /$$__  $$ /$$__  $$| $$$ | $$| $$$ | $$| $$_____/ /$$__  $$|__  $$__/      | $$_____//$$__  $$| $$  | $$| $$__  $$
+| $$  \__/| $$  \ $$| $$$$| $$| $$$$| $$| $$      | $$  \__/   | $$         | $$     | $$  \ $$| $$  | $$| $$  \ $$
+| $$      | $$  | $$| $$ $$ $$| $$ $$ $$| $$$$$   | $$         | $$         | $$$$$  | $$  | $$| $$  | $$| $$$$$$$/
+| $$      | $$  | $$| $$  $$$$| $$  $$$$| $$__/   | $$         | $$         | $$__/  | $$  | $$| $$  | $$| $$__  $$
+| $$    $$| $$  | $$| $$\  $$$| $$\  $$$| $$      | $$    $$   | $$         | $$     | $$  | $$| $$  | $$| $$  \ $$
+|  $$$$$$/|  $$$$$$/| $$ \  $$| $$ \  $$| $$$$$$$$|  $$$$$$/   | $$         | $$     |  $$$$$$/|  $$$$$$/| $$  | $$
+ \______/  \______/ |__/  \__/|__/  \__/|________/ \______/    |__/         |__/      \______/  \______/ |__/  |__/
+""")
+    print("="*150)
 
     current_rows = 6
     current_columns = 7
