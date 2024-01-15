@@ -10,6 +10,8 @@ __author__ = "Ayaan Adrito"
 
 MAX_COLUMNS = 35
 MAX_ROWS = 30
+MIN_ROWS = 6
+MIN_COLUMNS = 7
 
 PLAYER_ONE = "🟡"
 PLAYER_TWO = "🔴"
@@ -135,10 +137,9 @@ def place_coin(column: int, player: str, board: list):
         
     return False
 
-def find_winner(board: list, player: str) -> str:
-    """Determine if player has won in board. If not, return ⚪."""
+def check_horizontal(board: list, player: str) -> str:
+    """Check for four in a row horizontally"""
 
-    # Search horizontally
     counter = 0
     for row in board:
         counter = 0
@@ -149,7 +150,12 @@ def find_winner(board: list, player: str) -> str:
                     return player
             else:
                 counter = 0
-    # Search vertically
+
+    return "⚪"
+
+def check_vertical(board: list, player: str) -> str:
+    """Check for four in a row vertically"""
+
     counter = 0
     for i in range(len(board[0])):
         counter = 0
@@ -161,7 +167,10 @@ def find_winner(board: list, player: str) -> str:
             else:
                 counter = 0
 
-    orig_board = board
+    return "⚪"
+
+def check_left_diagonal(board: list, player: str) -> str:
+    """Check for four in a row diagonally left to right"""
 
     # Search diagonally left to right
     while len(board[0]) > 3:
@@ -184,12 +193,15 @@ def find_winner(board: list, player: str) -> str:
                 x_counter += 1
 
             main_counter += 1
+            counter = 0
 
         board = split_board(board, True)
         counter = 0
 
-    # Reset board after splitting to setup right-left diagonal search
-    board = orig_board
+    return "⚪"
+
+def check_right_diagonal(board: list, player: str) -> str:
+    """Check for four in a row diagonally right to left"""
 
     # Search diagonally right to left
     while len(board[0]) > 3:
@@ -213,10 +225,19 @@ def find_winner(board: list, player: str) -> str:
                 x_counter -= 1
 
             main_counter += 1
+            counter = 0
             
         board = split_board(board, False)
         counter = 0
 
+    return "⚪" 
+
+def find_winner(board: list, player: str) -> str:
+    """Determine if player has won in board. If not, return ⚪."""
+
+    if check_horizontal(board, player) == player or check_vertical(board, player) == player or check_left_diagonal(board, player) == player or check_right_diagonal(board, player) == player:
+        return player
+    
     return "⚪"
 
 def split_board(board: list, left: bool) -> list:
@@ -243,9 +264,8 @@ def split_board(board: list, left: bool) -> list:
 
     return result
 
-
 def main():
-
+    # SHOULD WE HAVE TWO SPACES BETWEEN EVERY FUNCTION?!
     print("="*12)
     print("CONNECT FOUR")
     print("="*12)
@@ -297,11 +317,11 @@ def main():
         
         # Change board dimensions
         elif num == 2:
-            print(f"\nPlease enter the desired rows (less than {MAX_ROWS + 1}): ")
-            rows = validate_input(1, MAX_ROWS, "> ")
+            print(f"\nPlease enter the desired rows between {MIN_ROWS} and {MAX_ROWS + 1}: ")
+            rows = validate_input(MIN_ROWS, MAX_ROWS, "> ")
 
-            print(f"Please enter the desired columns (less than {MAX_COLUMNS + 1}): ")
-            columns = validate_input(1, MAX_COLUMNS, "> ")
+            print(f"Please enter the desired columns between {MIN_COLUMNS} and {MAX_COLUMNS + 1}: ")
+            columns = validate_input(MIN_COLUMNS, MAX_COLUMNS, "> ")
 
             board = change_board(rows, columns)
             current_rows = rows
@@ -312,7 +332,6 @@ def main():
         # Quit program
         elif num == 4:
             running = False
-    
 
 if __name__ == "__main__":
     main()
