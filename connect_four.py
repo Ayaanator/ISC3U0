@@ -138,7 +138,7 @@ def place_coin(column: int, player: str, board: list):
     return False
 
 def check_horizontal(board: list, player: str) -> str:
-    """Check for four in a row horizontally"""
+    """Check for four in a row horizontally."""
 
     counter = 0
     for row in board:
@@ -245,6 +245,7 @@ def split_board(board: list, left: bool) -> list:
     
     result = []
     
+    # Strip left column
     if left == True:
         for row in board:
             new_row = []
@@ -254,6 +255,7 @@ def split_board(board: list, left: bool) -> list:
 
             result += [new_row]
     else:
+        # Split right column
         for row in board:
             new_row = []
 
