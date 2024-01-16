@@ -73,7 +73,7 @@ def validate_input(min: int, max: int, msg: str) -> int:
             if min <= number <= max:
                 return number
             else:
-                print(f"Number {number} is out of range. Input must be between {min} and {max}")
+                print(f"Number {number} is out of range. Input must be between {min} and {max}.")
         except:
             print("Invalid input. You must enter an integer.")
 
@@ -351,10 +351,10 @@ def main():
         
         # Change board dimensions
         elif num == 2:
-            print(f"\nPlease enter the desired rows between {MIN_ROWS} and {MAX_ROWS + 1}: ")
+            print(f"\nPlease enter the desired rows between {MIN_ROWS} and {MAX_ROWS}: ")
             rows = validate_input(MIN_ROWS, MAX_ROWS, "> ")
 
-            print(f"Please enter the desired columns between {MIN_COLUMNS} and {MAX_COLUMNS + 1}: ")
+            print(f"Please enter the desired columns between {MIN_COLUMNS} and {MAX_COLUMNS}: ")
             columns = validate_input(MIN_COLUMNS, MAX_COLUMNS, "> ")
 
             board = change_board(rows, columns)
@@ -366,6 +366,7 @@ def main():
         # Quit program
         elif num == 4:
             running = False
+            print("\nThanks for playing my Connect Four game, Mr. Cho!\n")
 
 if __name__ == "__main__":
     main()
