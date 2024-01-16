@@ -13,9 +13,9 @@ MAX_ROWS = 10
 MIN_ROWS = 4
 MIN_COLUMNS = 4
 
-PLAYER_ONE = "🟡"
+PLAYER_ONE = "🔘"
 PLAYER_TWO = "🔴"
-BLANK = "🔘"
+BLANK = "🟡"
 
 # Other blank emojis if display isn't compatible with other systems
 # ◯
@@ -197,24 +197,30 @@ def check_left_diagonal(board: list, player: str) -> str:
         counter = 0
         main_counter = 0
 
+        # Move down the leftmost column in a loop
         while main_counter < len(board):
             y_counter = main_counter
             x_counter = 0
+
+            # Move left-right diagonally
             while x_counter < main_counter + 1 and y_counter > -1 and x_counter < len(board[0]):
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
                     if counter == 4:
+                        # Four in a row
                         return player
                 else:
                     counter = 0
                 
+                # Move up and right
                 y_counter -= 1
                 x_counter += 1
 
             main_counter += 1
             counter = 0
 
+        # Split board from left to reiterate search loop over next column
         board = split_board(board, True)
         counter = 0
 
@@ -229,25 +235,30 @@ def check_right_diagonal(board: list, player: str) -> str:
         counter = 0
         main_counter = 0
 
+        # Move down the rightmost column in a loop
         while main_counter < len(board):
             y_counter = main_counter
             x_counter = len(board[0]) - 1
 
+            # Move right-left diagonally
             while x_counter > -1 and y_counter > -1:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
                     if counter == 4:
+                        # Four in a row
                         return player
                 else:
                     counter = 0
                 
+                # Move up and left
                 y_counter -= 1
                 x_counter -= 1
 
             main_counter += 1
             counter = 0
             
+        # Split board from right to reiterate search loop over next column
         board = split_board(board, False)
         counter = 0
 
@@ -257,7 +268,10 @@ def check_right_diagonal(board: list, player: str) -> str:
 def find_winner(board: list, player: str) -> str:
     """Determine if player has won in board. If not, return ⚪."""
 
-    if check_horizontal(board, player) == player or check_vertical(board, player) == player or check_left_diagonal(board, player) == player or check_right_diagonal(board, player) == player:
+    if check_horizontal(board, player) == player or \
+            check_vertical(board, player) == player or \
+            check_left_diagonal(board, player) == player or \
+            check_right_diagonal(board, player) == player:
         return player
     
     return "⚪"
@@ -278,7 +292,7 @@ def split_board(board: list, left: bool) -> list:
 
             result += [new_row]
     else:
-        # Split right column
+        # Strip right column
         for row in board:
             new_row = []
 
@@ -307,6 +321,7 @@ def main():
     current_rows = 6
     current_columns = 7
     
+    # Initialize 6 x 7 board
     board = change_board(current_rows, current_columns)
     print_board(board)
 
@@ -337,16 +352,18 @@ def main():
                     player_turn(PLAYER_TWO, current_columns, board)
                     winner = find_winner(board, PLAYER_TWO)
                     game_over = True if winner != "⚪" else is_full(board)
-
+            # Tie
             if winner == "⚪":
                 print("\nGame over! It's a tie!")
             else:
+                # Win
                 print(f"\nGame over! Player {winner}  won!")
                 if winner == "🟡":
                      winner = find_winner(board, "🟡")
                 elif winner == "🔴":
                     winner = find_winner(board, "🔴")
 
+            # Reset board for next round
             board = change_board(current_columns, current_columns)
         
         # Change board dimensions
