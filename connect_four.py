@@ -10,8 +10,8 @@ __author__ = "Ayaan Adrito"
 
 MAX_COLUMNS = 10
 MAX_ROWS = 10
-MIN_ROWS = 6
-MIN_COLUMNS = 7
+MIN_ROWS = 4
+MIN_COLUMNS = 4
 
 PLAYER_ONE = "🟡"
 PLAYER_TWO = "🔴"
@@ -125,8 +125,6 @@ def is_full(board: list) -> bool:
                 return False
 
     return True
-
-    # return not BLANK in board
 
 def player_turn(player: str, current_columns: int, board: list):
     """Do the player's turn on board."""
