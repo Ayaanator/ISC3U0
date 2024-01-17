@@ -12,6 +12,7 @@ MAX_COLUMNS = 10
 MAX_ROWS = 10
 MIN_ROWS = 4
 MIN_COLUMNS = 4
+CONNECTS_TO_WIN = 4
 
 PLAYER_ONE = "🔘"
 PLAYER_TWO = "🔴"
@@ -47,7 +48,7 @@ def print_menu():
 
     print("\nPlease choose from one of the following options:")
     print("1. Play game")
-    print("2. Change dimensions")
+    print("2. Change board dimensions")
     print("3. How to play & Rules")
     print("4. Exit")
 
@@ -86,7 +87,6 @@ def print_board(board: list):
     for i in range(len(board)):
         if first_row == True:
             print()
-            pass
 
         first_column = True
 
@@ -126,6 +126,7 @@ def is_full(board: list) -> bool:
 
     return True
 
+
 def player_turn(player: str, current_columns: int, board: list):
     """Do the player's turn on board."""
 
@@ -164,7 +165,7 @@ def check_horizontal(board: list, player: str) -> str:
         for item in row:
             if item == player:
                 counter += 1
-                if counter == 4:
+                if counter == CONNECTS_TO_WIN:
                     return player
             else:
                 counter = 0
@@ -181,7 +182,7 @@ def check_vertical(board: list, player: str) -> str:
         for j in range(len(board)):
             if board[j][i] == player:
                 counter += 1
-                if counter == 4:
+                if counter == CONNECTS_TO_WIN:
                     return player
             else:
                 counter = 0
@@ -207,7 +208,7 @@ def check_left_diagonal(board: list, player: str) -> str:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
-                    if counter == 4:
+                    if counter == CONNECTS_TO_WIN:
                         # Four in a row
                         return player
                 else:
@@ -245,7 +246,7 @@ def check_right_diagonal(board: list, player: str) -> str:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
-                    if counter == 4:
+                    if counter == CONNECTS_TO_WIN:
                         # Four in a row
                         return player
                 else:
