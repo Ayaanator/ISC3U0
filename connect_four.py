@@ -327,6 +327,7 @@ def main():
 
     running = True
 
+    # Main loop
     while running == True:
         print_menu()
         num = validate_input(1, 4, "> ")
