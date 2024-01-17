@@ -13,9 +13,9 @@ MAX_ROWS = 10
 MIN_ROWS = 4
 MIN_COLUMNS = 4
 
-PLAYER_ONE = "🔘"
+PLAYER_ONE = "🟡"
 PLAYER_TWO = "🔴"
-BLANK = "🟡"
+BLANK = "🔘"
 
 # Other blank emojis if display isn't compatible with other systems
 # ◯
@@ -266,8 +266,16 @@ def check_right_diagonal(board: list, player: str) -> str:
 
 
 def find_winner(board: list, player: str) -> str:
-    """Determine if player has won in board. If not, return ⚪."""
-
+    """Determine if player has won in board. If not, return ⚪.
+    
+    >>> find_winner([["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                     ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘",
+                     ["🔘", "🔘", "🔘", "🔘", "🔘", "🟡", "🔘",
+                     ["🔘", "🔘", "🔘", "🔘", "🟡", "🔴", "🔘",
+                     ["🔘", "🔘", "🟡", "🟡", "🔴", "🟡", "🔘",
+                     ["🔘", "🔘", "🟡", "🔴", "🔴", "🔴", "🔘"])
+    "🟡"
+    """
     if check_horizontal(board, player) == player or \
             check_vertical(board, player) == player or \
             check_left_diagonal(board, player) == player or \
