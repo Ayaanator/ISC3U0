@@ -8,17 +8,25 @@ If all columns are full and there isn't four in a row, it is a tie.
 
 __author__ = "Ayaan Adrito"
 
+# Maximum amount of connects the win condition can be set to
+MIN_CONNECTS = 3
+MAX_CONNECTS = 10
+
+# Maximum amount of columns the board can be changed to
 MAX_COLUMNS = 50
 MAX_ROWS = 50
-MIN_ROWS = 4
-MIN_COLUMNS = 4
-CONNECTS_TO_WIN = 4
 
+# Original constants for resetting game settings
+ORIG_CONNECTS_TO_WIN = 4
+ORIG_ROWS = 6
+ORIG_COLUMNS = 7
+
+# Graphical constants
 PLAYER_ONE = "🟡"
 PLAYER_TWO = "🔴"
 BLANK = "🔘"
 
-# Other blank emojis if display isn't compatible with other systems
+# Other blank emojis to use if display isn't compatible with other systems
 # ◯
 # ⚪
 # 〄
@@ -65,7 +73,7 @@ def print_menu():
 
     print("\nPlease choose from one of the following options:")
     print("1. Play game")
-    print("2. Change board dimensions")
+    print("2. Change settings")
     print("3. How to play & Rules")
     print("4. Exit")
 
@@ -220,7 +228,7 @@ def place_coin(column: int, player: str, board: list):
     return False
 
 
-def check_horizontal(board: list, player: str) -> str:
+def check_horizontal(board: list, player: str, connects_to_win: int) -> str:
     """Check for four in a row horizontally."""
 
     counter = 0
@@ -229,7 +237,7 @@ def check_horizontal(board: list, player: str) -> str:
         for item in row:
             if item == player:
                 counter += 1
-                if counter == CONNECTS_TO_WIN:
+                if counter == connects_to_win:
                     return player
             else:
                 counter = 0
@@ -237,7 +245,7 @@ def check_horizontal(board: list, player: str) -> str:
     return "⚪"
 
 
-def check_vertical(board: list, player: str) -> str:
+def check_vertical(board: list, player: str, connects_to_win: int) -> str:
     """Check for four in a row vertically"""
 
     counter = 0
@@ -246,7 +254,7 @@ def check_vertical(board: list, player: str) -> str:
         for j in range(len(board)):
             if board[j][i] == player:
                 counter += 1
-                if counter == CONNECTS_TO_WIN:
+                if counter == connects_to_win:
                     return player
             else:
                 counter = 0
@@ -254,7 +262,7 @@ def check_vertical(board: list, player: str) -> str:
     return "⚪"
 
 
-def check_left_diagonal(board: list, player: str) -> str:
+def check_left_diagonal(board: list, player: str, connects_to_win: int) -> str:
     """Check for four in a row diagonally left to right"""
 
     # Search diagonally left to right
@@ -272,7 +280,7 @@ def check_left_diagonal(board: list, player: str) -> str:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
-                    if counter == CONNECTS_TO_WIN:
+                    if counter == connects_to_win:
                         # Four in a row
                         return player
                 else:
@@ -292,7 +300,7 @@ def check_left_diagonal(board: list, player: str) -> str:
     return "⚪"
 
 
-def check_right_diagonal(board: list, player: str) -> str:
+def check_right_diagonal(board: list, player: str, connects_to_win) -> str:
     """Check for four in a row diagonally right to left"""
 
     # Search diagonally right to left
@@ -310,7 +318,7 @@ def check_right_diagonal(board: list, player: str) -> str:
                 test = board[y_counter][x_counter]
                 if test == player:
                     counter += 1
-                    if counter == CONNECTS_TO_WIN:
+                    if counter == connects_to_win:
                         # Four in a row
                         return player
                 else:
@@ -330,8 +338,8 @@ def check_right_diagonal(board: list, player: str) -> str:
     return "⚪" 
 
 
-def find_winner(board: list, player: str) -> str:
-    """Determine if player has won in board. If not, return ⚪.
+def find_winner(board: list, player: str, connects_to_win: int) -> str:
+    """Determine if player has won by getting connects_to_win connects in board. If not, return ⚪.
     
     >>> find_winner([["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
                      ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
@@ -351,10 +359,10 @@ def find_winner(board: list, player: str) -> str:
     """
 
     # Check all directions (up, down, left, right, and all four diagonals)
-    if check_horizontal(board, player) == player or \
-            check_vertical(board, player) == player or \
-            check_left_diagonal(board, player) == player or \
-            check_right_diagonal(board, player) == player:
+    if check_horizontal(board, player, connects_to_win) == player or \
+            check_vertical(board, player, connects_to_win) == player or \
+            check_left_diagonal(board, player, connects_to_win) == player or \
+            check_right_diagonal(board, player, connects_to_win) == player:
         return player
     
     return "⚪"
@@ -430,11 +438,12 @@ def main():
 """)
     print("="*150)
 
+    # Initialize 6 x 7 board and default win condition
     current_rows = 6
     current_columns = 7
-    
-    # Initialize 6 x 7 board
+    connects_to_win = 4
     board = make_board(current_rows, current_columns)
+
     running = True
 
     # Main loop
@@ -454,14 +463,14 @@ def main():
             while game_over == False:
                 # Player one turn
                 player_turn(PLAYER_ONE, current_columns, board)
-                winner = find_winner(board, PLAYER_ONE)
+                winner = find_winner(board, PLAYER_ONE, connects_to_win)
                 game_over = True if winner != "⚪" else is_full(board)
 
                 # Check if game is over before letting player 🔴 go
                 if game_over == False:
                     # Player two turn
                     player_turn(PLAYER_TWO, current_columns, board)
-                    winner = find_winner(board, PLAYER_TWO)
+                    winner = find_winner(board, PLAYER_TWO, connects_to_win)
                     game_over = True if winner != "⚪" else is_full(board)
             # Tie
             if winner == "⚪":
@@ -469,25 +478,38 @@ def main():
             else:
                 # Win
                 print(f"\nGame over! Player {winner}  won!")
-                if winner == "🟡":
-                     winner = find_winner(board, "🟡")
-                elif winner == "🔴":
-                    winner = find_winner(board, "🔴")
 
             # Reset board for next round
             board = make_board(current_columns, current_columns)
         
-        # Change board dimensions
+        # Change settings
         elif num == 2:
-            print(f"\nPlease enter the desired rows between {MIN_ROWS} and {MAX_ROWS}: ")
-            rows = validate_input(MIN_ROWS, MAX_ROWS, "> ")
+            print("\n1. Change amount of connects for win condition")
+            print("2. Change board dimensions")
+            print("3. Reset to default")
+            num = validate_input(1, 3, "> ")
 
-            print(f"Please enter the desired columns between {MIN_COLUMNS} and {MAX_COLUMNS}: ")
-            columns = validate_input(MIN_COLUMNS, MAX_COLUMNS, "> ")
+            # Change win condition
+            if num == 1:
+                print(f"\nPlease enter the desired win condtion {MIN_CONNECTS} and {MAX_CONNECTS}: ")
+                desired_connects = validate_input(MIN_CONNECTS, MAX_CONNECTS, "> ")
+                connects_to_win  = desired_connects
+            # Change board dimensions
+            elif num == 2:
+                print(f"\nPlease enter the desired rows between {connects_to_win} and {MAX_ROWS}: ")
+                rows = validate_input(connects_to_win, MAX_ROWS, "> ")
 
-            board = make_board(rows, columns)
-            current_rows = rows
-            current_columns = columns
+                print(f"Please enter the desired columns between {connects_to_win} and {MAX_COLUMNS}: ")
+                columns = validate_input(connects_to_win, MAX_COLUMNS, "> ")
+
+                current_rows = rows
+                current_columns = columns
+                board = make_board(current_rows, current_columns)
+            else:
+                connects_to_win = ORIG_CONNECTS_TO_WIN
+                current_rows = ORIG_ROWS
+                current_columns = ORIG_COLUMNS
+                board = make_board(current_rows, current_columns)
         # Print the rules
         elif num == 3:
             print_rules()
