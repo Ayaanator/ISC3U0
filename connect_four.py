@@ -8,8 +8,8 @@ If all columns are full and there isn't four in a row, it is a tie.
 
 __author__ = "Ayaan Adrito"
 
-MAX_COLUMNS = 10
-MAX_ROWS = 10
+MAX_COLUMNS = 50
+MAX_ROWS = 50
 MIN_ROWS = 4
 MIN_COLUMNS = 4
 CONNECTS_TO_WIN = 4
@@ -27,8 +27,25 @@ BLANK = "🔘"
 
 game_over = False
 
-def change_board(rows: int, columns: int):
-    """Change the board's dimensions to rows x columns."""
+def make_board(rows: int, columns: int):
+    """Make a new board that is rows x columns.
+    
+    >>> make_board(6, 7)
+
+    [["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"]]
+
+     >>> make_board(4, 4)
+
+    [["🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘"],
+     ["🔘", "🔘", "🔘", "🔘"]]
+    """
 
     result = []
 
@@ -98,10 +115,18 @@ def print_board(board: list):
             print(f"{board[i][j]} |", end="")
     
     # Print the column numbers under the board
+    first_row = True
+
     print()
-    print("  ", end ="")
     for k in range(len(board[0])):
-        print(f"{k + 1}   ", end="")
+        if first_row == True:
+            print(f"  {k + 1}", end="")
+            first_row = False
+        else:
+            if k < 10:
+                print(f"   {k + 1}", end="")
+            else:
+                print(f"  {k + 1}", end="")
 
 
 def print_rules():
@@ -144,7 +169,46 @@ def player_turn(player: str, current_columns: int, board: list):
 
 
 def place_coin(column: int, player: str, board: list):
-    """Place coin in desired column of board. If column is full, return False."""
+    """Place coin in desired column of board. If column is full, return False.
+    
+    >>> place_coin(4, 🔴, 
+                   [["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🟡", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🟡", "🔴", "🔘", "🔘", "🔘"]])
+
+                   [["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔴", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🟡", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🟡", "🔴", "🔘", "🔘", "🔘"]]
+
+                    True
+
+    >>> place_coin(53, 🟡, 
+                   [["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🟡", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🟡", "🔴", "🔘", "🔘", "🔘"]])
+
+                   [["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🔴", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🔘", "🟡", "🔘", "🔘", "🔘"],
+                    ["🔘", "🔘", "🟡", "🔴", "🔘", "🔘", "🔘"]]
+
+                    False
+                    Number 53 is out of range. Input must be between 1 and 7.
+    """
+
+    # Input is between 1 and length of board[0], 
+    # -1 is needed to set column to the correct index
     column -= 1
 
     length = len(board)
@@ -274,7 +338,7 @@ def find_winner(board: list, player: str) -> str:
                      ["🔘", "🔘", "🔘", "🔘", "🔘", "🟡", "🔘"],
                      ["🔘", "🔘", "🔘", "🔘", "🟡", "🔴", "🔘"],
                      ["🔘", "🔘", "🟡", "🟡", "🔴", "🟡", "🔘"],
-                     ["🔘", "🔘", "🟡", "🔴", "🔴", "🔴", "🔘"]])
+                     ["🔘", "🔘", "🟡", "🔴", "🔴", "🔴", "🔘"]], 🟡)
     "🟡"
 
     >>> find_winner([["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
@@ -282,9 +346,11 @@ def find_winner(board: list, player: str) -> str:
                      ["🔘", "🔘", "🔘", "🔘", "🔘", "🔘", "🔘"],
                      ["🔘", "🔘", "🔘", "🔘", "🟡", "🔴", "🔘"],
                      ["🔘", "🔘", "🟡", "🟡", "🔴", "🟡", "🔘"],
-                     ["🟡", "🔘", "🟡", "🔴", "🔴", "🔴", "🔘"]])
+                     ["🟡", "🔘", "🟡", "🔴", "🔴", "🔴", "🔘"]], 🟡)
     "🔘"
     """
+
+    # Check all directions (up, down, left, right, and all four diagonals)
     if check_horizontal(board, player) == player or \
             check_vertical(board, player) == player or \
             check_left_diagonal(board, player) == player or \
@@ -368,9 +434,7 @@ def main():
     current_columns = 7
     
     # Initialize 6 x 7 board
-    board = change_board(current_rows, current_columns)
-    print_board(board)
-
+    board = make_board(current_rows, current_columns)
     running = True
 
     # Main loop
@@ -380,7 +444,7 @@ def main():
 
         # Game loop
         if num == 1:
-            board = change_board(current_rows, current_columns)
+            board = make_board(current_rows, current_columns)
             print_board(board)
             print("\n")
 
@@ -411,7 +475,7 @@ def main():
                     winner = find_winner(board, "🔴")
 
             # Reset board for next round
-            board = change_board(current_columns, current_columns)
+            board = make_board(current_columns, current_columns)
         
         # Change board dimensions
         elif num == 2:
@@ -421,7 +485,7 @@ def main():
             print(f"Please enter the desired columns between {MIN_COLUMNS} and {MAX_COLUMNS}: ")
             columns = validate_input(MIN_COLUMNS, MAX_COLUMNS, "> ")
 
-            board = change_board(rows, columns)
+            board = make_board(rows, columns)
             current_rows = rows
             current_columns = columns
         # Print the rules
