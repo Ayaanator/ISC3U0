@@ -494,8 +494,24 @@ def main():
                 print(f"\nPlease enter the desired win condtion {MIN_CONNECTS} and {MAX_CONNECTS}: ")
                 desired_connects = validate_input(MIN_CONNECTS, MAX_CONNECTS, "> ")
                 connects_to_win  = desired_connects
+
+                # Change dimensions if desired_connects is too high
+                if connects_to_win > current_rows and desired_connects > current_columns:
+                    print("Your board is too small. Changing dimensions...")
+                    current_rows = connects_to_win
+                    current_columns = connects_to_win
+                elif connects_to_win > current_rows:
+                    print("Your board is too small. Changing dimensions...")
+                    current_rows = connects_to_win
+                elif connects_to_win > current_columns:
+                    print("Your board is too small. Changing dimensions...")
+                    current_columns = connects_to_win
+
+                board = make_board(current_rows, current_columns)
             # Change board dimensions
             elif num == 2:
+                # Make sure columns and rows aren't less than connects_to_win 
+                # to make sure winning is possible
                 print(f"\nPlease enter the desired rows between {connects_to_win} and {MAX_ROWS}: ")
                 rows = validate_input(connects_to_win, MAX_ROWS, "> ")
 
@@ -505,6 +521,7 @@ def main():
                 current_rows = rows
                 current_columns = columns
                 board = make_board(current_rows, current_columns)
+            # Set settings to default
             else:
                 connects_to_win = ORIG_CONNECTS_TO_WIN
                 current_rows = ORIG_ROWS
