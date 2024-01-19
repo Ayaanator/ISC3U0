@@ -1,4 +1,5 @@
 """This program plays connect four on the terminal.
+
 The goal of the game is to connect four of the same coins in a row.
 This can be done vertically, horizontally, and diagonally.
 Coins are placed on top of previously placed coins.
@@ -10,11 +11,11 @@ __author__ = "Ayaan Adrito"
 
 # Maximum amount of connects the win condition can be set to
 MIN_CONNECTS = 3
-MAX_CONNECTS = 10
+MAX_CONNECTS = 6
 
 # Maximum amount of columns the board can be changed to
-MAX_COLUMNS = 50
-MAX_ROWS = 50
+MAX_COLUMNS = 20
+MAX_ROWS = 20
 
 # Original constants for resetting game settings
 ORIG_CONNECTS_TO_WIN = 4
