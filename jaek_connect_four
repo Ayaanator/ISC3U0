@@ -1,0 +1,679 @@
+"""
+
+Connect 4 is a turn-based strategy game, where two players drop tokens into the
+
+grid. Choose a letter, corresponding with a column, to place a token. The tokens
+
+are affected by gravity, going to the lowest possible row that is not taken up
+
+by another token. To win, line up 4 tokens in a row
+
+(vertically, horizontally, or diagonally!).
+
+"""
+
+
+
+
+
+__author__ = 'Jake Maly'
+
+
+
+EMPTY = " "
+
+board = [[EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]]
+
+
+
+# 2D List, so you can use a coordinate system for placing tokens.
+
+# In this coordinate system, it works like this:
+
+# board[row][column]
+
+# So, if we had board[3][3],
+
+# That would translate to position D3.
+
+
+
+ROWS = 6
+
+COLUMNS = 7
+
+
+
+PLAYER_ONE = "x"
+
+PLAYER_TWO = "o"
+
+
+
+player_one_wins = 0
+
+player_one_winstreak = 0
+
+
+
+player_two_wins = 0
+
+player_two_winstreak = 0
+
+
+
+
+
+def create_grid():
+
+    """Print the text-based interface for the game.
+
+Print the correct tokens for each coordinate."""
+
+
+
+    # The grid follows a simple pattern.
+
+    # It prints a line that actually has the coordinates,
+
+    # and one for presentation.
+
+    # There are different presentation lines for the top and bottom parts
+
+    # of the grid.
+
+    
+
+    first = True 
+
+
+
+    for y in range(ROWS):
+
+        
+
+        if first:
+
+            # If this is the top part of the grid,
+
+            # print a different grid line
+
+            
+
+            print('\n\t  ┌───┬───┬───┬───┬───┬───┬───┐')
+
+            first = False
+
+            
+
+        else:
+
+            
+
+            print("\n\t  ├───┼───┼───┼───┼───┼───┼───┤")
+
+
+
+
+
+        print(f"        {y} " "│", end = "") # Print the row numbers
+
+        
+
+        for x in range(COLUMNS):
+
+            print(f" {board[y][x]} ", end = "│")
+
+    
+
+    # Different part for the bottom, and column labels            
+
+    print('\n\t  └───┴───┴───┴───┴───┴───┴───┘')
+
+    print('\t    A   B   C   D   E   F   G')
+
+    print()
+
+
+
+
+
+def get_column(turn: str) -> int:
+
+    """Return a valid column from user input."""
+
+    
+
+    while True:
+
+
+
+        column = input(
+
+            f" It's {turn.upper()}'s turn. Choose a column (A-G): ").upper()
+
+        # Recieve the selected column
+
+        
+
+        if len(column) == 1 and 'A' <= column <= 'G':
+
+            
+
+            column = ord(column) - ord('A')
+
+            # Set column to a real index number, able to be used in coordinates
+
+            return column
+
+        
+
+        else:
+
+            print(
+
+                "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"+
+
+                "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯")
+
+            print("\t⚠ Invalid column. Please choose a valid column.")
+
+            print(
+
+                "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"+
+
+                "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯")
+
+
+
+
+
+def get_row(x: int) -> int:
+
+    """Return the lowest possible row in a given column.
+
+If no rows found, return -1."""
+
+    
+
+    for y in range(ROWS - 1, -1, -1):
+
+        # Go from bottom to top rows, 5 - 0, finding the lowest possible row
+
+        if board[y][x] == EMPTY:
+
+            # If there is an empty slot there, return that row
+
+            return y
+
+    return -1
+
+
+
+
+
+def check_draw(turns: int, total_rows: int, total_columns: int) -> bool:
+
+    """Return a boolean on whether every turn possible has been played.
+
+
+
+    >>> check_draw(20, 6, 7)
+
+    False
+
+    >>> check_draw(42, 6, 7)
+
+    True
+
+    """
+
+    
+
+    if turns >= total_rows * total_columns:
+
+        # If the whole board has been played, return True
+
+        return True
+
+    else:
+
+        return False
+
+
+
+    
+
+def draw():
+
+    """Print a graphic for games that result in a draw."""
+
+    
+
+    print("""
+
+  ___  ___    ___      __
+
+ |   \| _ \  /_\ \    / /
+
+ | |) |   / / _ \ \/\/ / 
+
+ |___/|_|_\/_/ \_\_/\_/  
+
+                         """)
+
+
+
+
+
+def check_winner(row: int, column: int, turn: str) -> bool:
+
+    """Return a boolean on if the game has been won."""
+
+
+
+    # To solve win scenarios,
+
+    # V: check straight downwards in the column of the last-placed piece.
+
+    # H: check all horizontal lines in the row of the last-placed piece.
+
+    # D: check every diagonal pattern on the board.
+
+
+
+
+
+    # Check horizontal win
+
+    for x in range(COLUMNS - 3):
+
+        if (board[row][x] == turn and
+
+        board[row][x+1] == turn and
+
+        board[row][x+2] == turn and
+
+        board[row][x+3] == turn):
+
+            return True
+
+
+
+    # Check vertical win
+
+    try:
+
+        if (board[row][column] == turn and
+
+        board[row+1][column] == turn and
+
+        board[row+2][column] == turn and
+
+        board[row+3][column] == turn):
+
+            return True
+
+    except IndexError:
+
+        pass
+
+
+
+    
+
+    # Check diagonal win 1 \
+
+    # Top left to bottom right
+
+    for y in range(ROWS - 3):
+
+        for x in range(COLUMNS - 3):
+
+            if (board[y][x] == turn and
+
+            board[y+1][x+1] == turn and
+
+            board[y+2][x+2] == turn and
+
+            board[y+3][x+3] == turn):
+
+                return True
+
+
+
+    # Check diagonal win 2 /
+
+    # Bottom left to top right
+
+    for y in range(ROWS - 3):
+
+        for x in range(3, COLUMNS):
+
+            if (board[y][x] == turn and
+
+            board[y+1][x-1] == turn and
+
+            board[y+2][x-2] == turn and
+
+            board[y+3][x-3] == turn):
+
+                return True
+
+
+
+    return False
+
+
+
+
+
+def win(turn: str):
+
+    """Print graphics for games that end in a win, and update stats."""
+
+    
+
+    global player_one_wins, player_one_winstreak
+
+    global player_two_wins, player_two_winstreak
+
+    
+
+    if turn == PLAYER_ONE:
+
+        
+
+        print("""
+
+     ___  __   _____  _________    ____  _  ______  _      _______  ______
+
+    / _ \/ /  / _ \ \/ / __/ _ \  / __ \/ |/ / __/ | | /| / /  _/ |/ / __/
+
+   / ___/ /__/ __ |\  / _// , _/ / /_/ /    / _/   | |/ |/ // //    /\ \  
+
+  /_/  /____/_/ |_|/_/___/_/|_|  \____/_/|_/___/   |__/|__/___/_/|_/___/  """)
+
+
+
+        player_one_wins += 1
+
+        player_one_winstreak += 1
+
+        player_two_winstreak = 0
+
+
+
+        print(f"\n Winstreak >> {player_one_winstreak}")
+
+        
+
+
+
+        
+
+    if turn == PLAYER_TWO:
+
+        
+
+        print("""
+
+     ___  __   _____  _________    _______      ______    _      _______  ______
+
+    / _ \/ /  / _ \ \/ / __/ _ \  /_  __/ | /| / / __ \  | | /| / /  _/ |/ / __/
+
+   / ___/ /__/ __ |\  / _// , _/   / /  | |/ |/ / /_/ /  | |/ |/ // //    /\ \  
+
+  /_/  /____/_/ |_|/_/___/_/|_|   /_/   |__/|__/\____/"""+
+
+              """   |__/|__/___/_/|_/___/""")
+
+
+
+        player_two_wins += 1
+
+        player_two_winstreak += 1
+
+        player_one_winstreak = 0
+
+        print(f"\n Winstreak >> {player_two_winstreak}\n\n")
+
+        
+
+    
+
+def play_game():
+
+    """Play turn after turn in the game until an outcome is reached."""
+
+
+
+    global board
+
+    turn = PLAYER_ONE
+
+    turns = 0
+
+    # Important for checking for draw
+
+    
+
+    while True:
+
+        create_grid()
+
+        column = get_column(turn)
+
+     
+
+        row = get_row(column)
+
+        if row == -1:
+
+            print("⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"+
+
+                "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯")
+
+            print("\t⚠ That column is full. Please choose a valid column.")
+
+            print("⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯"+
+
+                "⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯")
+
+            continue
+
+
+
+        
+
+        board[row][column] = turn
+
+        # Set the selected position to the piece of the current player
+
+        turns += 1
+
+        # Increase turn counter, important for check_draw()
+
+
+
+        # check_winner() must be in front of check_draw()
+
+        if check_winner(row, column, turn):
+
+            create_grid()
+
+            win(turn)
+
+            break
+
+        
+
+        if check_draw(turns, ROWS, COLUMNS):
+
+            create_grid()
+
+            draw()
+
+            break
+
+
+
+        # Swap turns
+
+        if turn == PLAYER_ONE:
+
+            turn = PLAYER_TWO
+
+            
+
+        else:
+
+            turn = PLAYER_ONE
+
+
+
+    board = [[EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY],
+
+         [EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY, EMPTY]]
+
+
+
+
+
+def rules():
+
+    """Print rules for the game."""
+
+    
+
+    print("CONNECT 4 ⨉ RULES")
+
+    print(__doc__)
+
+
+
+
+
+def stats():
+
+    """Print player statistics."""
+
+    
+
+    print("CONNECT 4 ⨉ STATS")
+
+    print()
+
+    print(f"╭ PLAYER ONE ({PLAYER_ONE.upper()})\n│ Winstreak: "+
+
+          f"{player_one_winstreak}\n╰ Total Wins: {player_one_wins} ⍟")
+
+    print()
+
+    print(f"╭ PLAYER TWO ({PLAYER_TWO.upper()})\n│ Winstreak: "+
+
+          f"{player_two_winstreak}\n╰ Total Wins: {player_two_wins} ⍟")
+
+        
+
+
+
+def main():
+
+
+
+    print("""\n
+
+                                                              █████      
+
+                                                             ░░███       
+
+    ██████   ██████  ████████   ████████    ██████   ██████  ███████     
+
+   ███░░███ ███░░███░░███░░███ ░░███░░███  ███░░███ ███░░███░░░███░      
+
+  ░███ ░░░ ░███ ░███ ░███ ░███  ░███ ░███ ░███████ ░███ ░░░   ░███       
+
+  ░███  ███░███ ░███ ░███ ░███  ░███ ░███ ░███░░░  ░███  ███  ░███ ███   
+
+  ░░██████ ░░██████  ████ █████ ████ █████░░██████ ░░██████   ░░█████    
+
+   ░░░░░░   ░░░░░░  ░░░░ ░░░░░ ░░░░ ░░░░░  ░░░░░░   ░░░░░░     ░░░░░     
+
+                                                                                                                                             
+
+                  ██████                                                 
+
+                 ███░░███                                                
+
+                ░███ ░░░   ██████  █████ ████ ████████                   
+
+               ███████    ███░░███░░███ ░███ ░░███░░███                  
+
+              ░░░███░    ░███ ░███ ░███ ░███  ░███ ░░░                   
+
+                ░███     ░███ ░███ ░███ ░███  ░███                       
+
+                █████    ░░██████  ░░████████ █████                      
+
+               ░░░░░      ░░░░░░    ░░░░░░░░ ░░░░░
+
+               """)
+
+    print("\t\t      A program by Jake Maly")
+
+    while True:
+
+        print()
+
+        print("CONNECT 4 ⨉ MAIN MENU\n")
+
+        choice = input("1 > Play Game\n2 > Rules\n3 > Stats\n4 > Quit\n")
+
+        print("\n\n\n\n\n\n\n\n")
+
+        if choice == "1":
+
+            play_game()
+
+        elif choice == "2":
+
+            rules()
+
+            print("\n\n\n\n\n\n\n")
+
+        elif choice == "3":
+
+            stats()
+
+            print("\n\n\n\n\n\n\n")
+
+        elif choice == "4":
+
+            break
+
+    
+
+
+
+if __name__ == "__main__":
+
+    main()
